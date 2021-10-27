@@ -1,11 +1,13 @@
 //const { application } = require('express')
-const { response } = require('express')
 const express = require('express')
+const logger = require('./loggerMiddleware')
 //const http = require('http')//import en nodejs
 
 const app = express()// se crea aplicacion
 
 app.use(express.json())
+
+app.use(logger)
 
 let notes = [
     {
@@ -80,6 +82,12 @@ app.post('/api/notes', (request, response)=>{
     notes = [...notes, newNote]
 
     response.status(201).json(newNote)
+})
+
+app.use((request, response)=>{
+    response.status(404).json({
+        error: 'Not found'
+    })
 })
 
 const PORT = 3001
